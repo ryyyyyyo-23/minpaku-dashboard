@@ -64,14 +64,14 @@ Papa.parse(kpiUrl, {
     const data = results.data.filter(row => row["年月"] && row["実売上"]);
     const labels = data.map(row => row["年月"]);
     const sales = data.map(row => parseFloat(row["実売上"].replace(/,/g, '')));
-    const latest = data[data.length - 1];
 
-    // 数値表示
-    document.getElementById("latest-sales").textContent = "\u00a5" + sales[sales.length - 1].toLocaleString();
+    const latest = data[data.length - 1];
+    const latestSales = sales[sales.length - 1];
+
+    document.getElementById("latest-sales").textContent = "¥" + latestSales.toLocaleString();
     document.getElementById("latest-margin").textContent = latest["営業利益率"] || "-";
     document.getElementById("latest-occ").textContent = latest["稼働率"] || "-";
 
-    // グラフ描画
     new Chart(document.getElementById("salesChart"), {
       type: 'line',
       data: {
