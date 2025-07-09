@@ -63,12 +63,15 @@ Papa.parse(kpiUrl, {
   complete: function(results) {
     const data = results.data.filter(row => row["年月"] && row["実売上"]);
     const labels = data.map(row => row["年月"]);
-    const sales = data.map(row => parseFloat(row["実売上"].replace(/,/g, '')));
+    const sales = data.map(row => {
+      const raw = row["実売上"];
+      return raw ? parseFloat(raw.replace(/,/g, '')) : 0;
+    });
 
     const latest = data[data.length - 1];
     const latestSales = sales[sales.length - 1];
 
-    document.getElementById("latest-sales").textContent = "¥" + latestSales.toLocaleString();
+    document.getElementById("latest-sales").textContent = latestSales !== undefined ? "¥" + latestSales.toLocaleString() : "-";
     document.getElementById("latest-margin").textContent = latest["営業利益率"] || "-";
     document.getElementById("latest-occ").textContent = latest["稼働率"] || "-";
 
@@ -97,3 +100,4 @@ Papa.parse(kpiUrl, {
 </script>
 </body>
 </html>
+
